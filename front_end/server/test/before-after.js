@@ -1,4 +1,4 @@
-const connection = require('../lib/setup-mongoose');
+const connection = require('../lib/mongoose-setup');
 const db = require('./db-connect');
 
 before(db.drop());
