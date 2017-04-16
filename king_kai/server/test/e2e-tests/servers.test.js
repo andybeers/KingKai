@@ -33,7 +33,17 @@ describe('CRUD servers route', () => {
       .then(res => {
         testServer._id = res.body._id;
         testServer.__v = res.body.__v;
-        assert.equal(res.body, testServer);
+        assert.deepEqual(res.body, testServer);
+        done();
+      })
+      .catch(done);
+  });
+
+  it('GETs all servers', done => {
+    request
+      .get('/api/servers')
+      .then(res => {
+        assert.deepEqual(res.body[0], testServer);
         done();
       })
       .catch(done);
