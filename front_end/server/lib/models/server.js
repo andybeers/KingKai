@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-  cpuLoad: { type: Array, required: true },
-  memoryUse: { type: Number, required: true },
+  cpuLoad: { type: Array },
+  memoryUse: { type: Number },
   diskUse: {
-    used: { type: Number, required: true },
-    free: { type: Number, required: true }
+    used: { type: Number },
+    free: { type: Number }
   },
   topProcesses: { type: Array},
   dataStores: { type: Array }
