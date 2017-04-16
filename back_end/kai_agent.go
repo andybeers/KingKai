@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"sync"
@@ -14,7 +13,7 @@ import (
 )
 
 const (
-	report_cadence = 5
+	report_cadence = 2
 )
 
 var (
@@ -58,8 +57,7 @@ func collectStats(token chan struct{}) {
 	select {
 	case cpuStat := <-cpuResults:
 		statsCollection.cpuStat = cpuStat
-		fmt.Print("Recevied stats!")
-		fmt.Print(statsCollection.cpuStat)
+		fmt.Println("Received stats!")
 
 	}
 	go sendInfoToKingKai(&statsCollection)
@@ -69,11 +67,12 @@ func collectStats(token chan struct{}) {
 
 func sendInfoToKingKai(stats *StatsCollection) {
 
-	fmt.Print("Sending info to king kai")
-	stats_json, err := json.Marshal(stats)
+	fmt.Println("Sending info to king kai")
+	stats_json, err := json.Marshal(stats.cpuStat.timestat)
 	if err != nil {
 		log.Printf("Error converting stats to json %v", err)
 	}
+	fmt.Println(string(stats_json))
 	req, err := http.NewRequest("POST", kai_host, bytes.NewBuffer(stats_json))
 	req.Header.Set("Content-Type", "application/json")
 
@@ -82,13 +81,11 @@ func sendInfoToKingKai(stats *StatsCollection) {
 	if err != nil {
 		// TODO: should find a way to log this probably
 		fmt.Printf("shit there was an error %v", err)
+		return
 	}
 
 	defer resp.Body.Close()
 	fmt.Println("response status:", resp.Status)
-	fmt.Println("response headers:", resp.Header)
-	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println("response Body:", string(body))
 }
 
 func main() {
