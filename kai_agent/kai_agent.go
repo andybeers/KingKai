@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"sync"
 	"time"
 
 	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/mem"
 )
 
 const (
@@ -21,49 +21,61 @@ var (
 	kai_host string
 )
 
-func collectCPUStat(wg sync.WaitGroup) <-chan []cpu.TimesStat {
-	wg.Add(1)
+func collectCPUStat(done chan struct{}) <-chan []cpu.TimesStat {
 	cpuResults := make(chan []cpu.TimesStat)
 	go func() {
 		timestat, _ := cpu.Times(true)
 		cpuResults <- timestat
-		wg.Done()
+		done <- struct{}{}
 	}()
 	return cpuResults
 }
 
+func collectMEMStat(done chan struct{}) <-chan *mem.VirtualMemoryStat {
+	memResults := make(chan *mem.VirtualMemoryStat)
+	go func() {
+		memstat, _ := mem.VirtualMemory()
+		memResults <- memstat
+		done <- struct{}{}
+	}()
+	return memResults
+}
+
 type StatsCollection struct {
-	cpuStat []cpu.TimesStat
+	CPUS []cpu.TimesStat        `json:"cpus"`
+	MEM  *mem.VirtualMemoryStat `json:"memory"`
 }
 
 func collectStats(token chan struct{}) {
 	// configure which stats are sent based on
 	// kai file
-	var wg sync.WaitGroup
-
-	cpuResults := collectCPUStat(wg)
+	done := make(chan struct{}, 2)
+	cpuResults := collectCPUStat(done)
+	memResults := collectMEMStat(done)
 	statsCollection := StatsCollection{}
 
-	go func() {
-		wg.Wait()
-	}()
+	for n := 2; n > 0; {
+		select {
+		case cpuStat, _ := <-cpuResults:
+			statsCollection.CPUS = cpuStat
 
-	select {
-	case cpuStat := <-cpuResults:
-		statsCollection.cpuStat = cpuStat
-		fmt.Println("Received stats!")
-
+		case memStat, _ := <-memResults:
+			statsCollection.MEM = memStat
+		case <-done:
+			n--
+		}
 	}
-	go sendStatsToKingKai(&statsCollection)
+
+	go sendStatsToKingKai(statsCollection)
 	// i think ok to release token now.  if we fail to send request
 	// i dont think it's worth holding onto it
 	<-token
 }
 
-func sendStatsToKingKai(stats *StatsCollection) {
+func sendStatsToKingKai(stats StatsCollection) {
 
 	fmt.Println("Sending info to king kai")
-	stats_json, err := json.Marshal(stats.cpuStat)
+	stats_json, err := json.Marshal(stats)
 	if err != nil {
 		log.Printf("Error converting stats to json %v", err)
 	}
