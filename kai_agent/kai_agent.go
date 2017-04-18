@@ -9,6 +9,8 @@ import (
 	"time"
 
 	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/disk"
+	"github.com/shirou/gopsutil/host"
 	"github.com/shirou/gopsutil/mem"
 )
 
@@ -21,6 +23,30 @@ var (
 	kai_host string
 )
 
+func collectHostStat(done chan struct{}) <-chan *HostStats {
+	hostResults := make(chan *HostStats)
+	go func() {
+		infoStat, _ := host.Info()
+		hostResults <- &HostStats{
+			Info: infoStat,
+		}
+		done <- struct{}{}
+	}()
+	return hostResults
+}
+
+func collectDiskStat(done chan struct{}) <-chan *DiskStats {
+	diskResults := make(chan *DiskStats)
+	go func() {
+		d_usage, _ := disk.Usage("/")
+		diskResults <- &DiskStats{
+			Usage: d_usage,
+		}
+		done <- struct{}{}
+	}()
+	return diskResults
+}
+
 func collectCPUStat(done chan struct{}) <-chan []cpu.TimesStat {
 	cpuResults := make(chan []cpu.TimesStat)
 	go func() {
@@ -31,36 +57,55 @@ func collectCPUStat(done chan struct{}) <-chan []cpu.TimesStat {
 	return cpuResults
 }
 
-func collectMEMStat(done chan struct{}) <-chan *mem.VirtualMemoryStat {
-	memResults := make(chan *mem.VirtualMemoryStat)
+func collectMEMStat(done chan struct{}) <-chan *MemoryStats {
+	memResults := make(chan *MemoryStats)
 	go func() {
-		memstat, _ := mem.VirtualMemory()
-		memResults <- memstat
+		vmstat, _ := mem.VirtualMemory()
+		swapstat, _ := mem.SwapMemory()
+
+		memResults <- &MemoryStats{
+			Virtual: vmstat,
+			Swap:    swapstat,
+		}
 		done <- struct{}{}
 	}()
 	return memResults
 }
 
+type DiskStats struct {
+	Usage *disk.UsageStat `json: "usage"`
+}
+type HostStats struct {
+	Info *host.InfoStat `json:"info"`
+}
+type MemoryStats struct {
+	Virtual *mem.VirtualMemoryStat `json:"virtual"`
+	Swap    *mem.SwapMemoryStat    `json:"swap"`
+}
+
 type StatsCollection struct {
-	CPUS []cpu.TimesStat        `json:"cpus"`
-	MEM  *mem.VirtualMemoryStat `json:"memory"`
+	CPUS []cpu.TimesStat `json:"cpus"`
+	MEM  *MemoryStats    `json:"memory"`
+	DISK *DiskStats      `json: "disk"`
 }
 
 func collectStats(token chan struct{}) {
 	// configure which stats are sent based on
 	// kai file
-	done := make(chan struct{}, 2)
+	done := make(chan struct{}, 3)
 	cpuResults := collectCPUStat(done)
 	memResults := collectMEMStat(done)
+	diskResults := collectDiskStat(done)
 	statsCollection := StatsCollection{}
 
-	for n := 2; n > 0; {
+	for n := 3; n > 0; {
 		select {
 		case cpuStat, _ := <-cpuResults:
 			statsCollection.CPUS = cpuStat
-
 		case memStat, _ := <-memResults:
 			statsCollection.MEM = memStat
+		case diskStat, _ := <-diskResults:
+			statsCollection.DISK = diskStat
 		case <-done:
 			n--
 		}
