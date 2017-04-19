@@ -10,6 +10,12 @@ router
       .then(servers => res.send(servers))
       .catch(next);
   })
+  .get('/:id', (req, res, next) => {
+    Server.findById(req.params.id)
+      .lean()
+      .then(server => res.send(server))
+      .catch(next);
+  })
   .post('/', bodyParser, (req, res, next) => {
     new Server(req.body).save()
       .then(newServer => res.send(newServer))

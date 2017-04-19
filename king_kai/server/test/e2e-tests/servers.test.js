@@ -5,7 +5,7 @@ chai.use(chaiHttp);
 const app = require('../../lib/app');
 const request = chai.request(app);
 
-describe('CRUD servers route', () => {
+describe('CRUD servers routes', () => {
   const testServer = {
     cpuLoad: [1, 2, 3],
     memoryUse: 123555,
