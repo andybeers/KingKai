@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint .",
     "pretest": "npm run lint",
-    "test": "MONGODB_URI=mongodb://localhost/KingKai-test mocha --recursive"
+    "test": "MONGODB_URI=mongodb://localhost/KingKai-test mocha --recursive",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
