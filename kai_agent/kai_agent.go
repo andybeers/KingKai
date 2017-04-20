@@ -22,10 +22,12 @@ const (
 
 var (
 	kai_host string
+	host_id  string
 )
 
 func collectHostStat() *host.InfoStat {
 	infoStat, _ := host.Info()
+	host_id = infoStat.HostID
 	return infoStat
 }
 
@@ -78,9 +80,10 @@ type MemoryStats struct {
 }
 
 type StatsCollection struct {
-	CPUS []cpu.TimesStat `json:"cpus"`
-	MEM  *MemoryStats    `json:"memory"`
-	DISK *DiskStats      `json: "disk"`
+	CPUS    []cpu.TimesStat `json:"cpus"`
+	MEM     *MemoryStats    `json:"memory"`
+	DISK    *DiskStats      `json: "disk"`
+	HOST_ID string
 }
 
 func collectStats(token chan struct{}) {
@@ -90,7 +93,9 @@ func collectStats(token chan struct{}) {
 	cpuResults := collectCPUStat(done)
 	memResults := collectMEMStat(done)
 	diskResults := collectDiskStat(done)
-	statsCollection := StatsCollection{}
+	statsCollection := StatsCollection{
+		HOST_ID: host_id,
+	}
 
 	for n := 3; n > 0; {
 		select {
