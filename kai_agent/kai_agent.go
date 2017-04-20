@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/shirou/gopsutil/cpu"
@@ -15,7 +16,7 @@ import (
 )
 
 const (
-	report_cadence            = 1
+	report_cadence            = 5
 	clear_stuck_token_cadence = 1
 )
 
@@ -23,16 +24,9 @@ var (
 	kai_host string
 )
 
-func collectHostStat(done chan struct{}) <-chan *HostStats {
-	hostResults := make(chan *HostStats)
-	go func() {
-		infoStat, _ := host.Info()
-		hostResults <- &HostStats{
-			Info: infoStat,
-		}
-		done <- struct{}{}
-	}()
-	return hostResults
+func collectHostStat() *host.InfoStat {
+	infoStat, _ := host.Info()
+	return infoStat
 }
 
 func collectDiskStat(done chan struct{}) <-chan *DiskStats {
@@ -76,7 +70,7 @@ type DiskStats struct {
 	Usage *disk.UsageStat `json: "usage"`
 }
 type HostStats struct {
-	Info *host.InfoStat `json:"info"`
+	Info *host.InfoStat
 }
 type MemoryStats struct {
 	Virtual *mem.VirtualMemoryStat `json:"virtual"`
@@ -125,7 +119,8 @@ func sendStatsToKingKai(stats StatsCollection) {
 		log.Printf("Error converting stats to json %v", err)
 	}
 	fmt.Println(string(stats_json))
-	req, err := http.NewRequest("POST", kai_host, bytes.NewBuffer(stats_json))
+	stats_url := kai_host + "/stats"
+	req, err := http.NewRequest("POST", stats_url, bytes.NewBuffer(stats_json))
 	if err != nil {
 		log.Printf("Error making request to king kai %v", err)
 	}
@@ -143,15 +138,62 @@ func sendStatsToKingKai(stats StatsCollection) {
 	fmt.Println("response status:", resp.Status)
 }
 
+type HandShake struct {
+	HostInfo        *host.InfoStat `json: "host_info"`
+	HandshakeSecret string         `json: "handshake_secret"`
+}
+
+func kingKaiHandShake() {
+	fmt.Println("hand shake with the king")
+	host_stats := collectHostStat()
+	handshake_secret := getHandShakeSecret()
+
+	handshake := HandShake{
+		HostInfo:        host_stats,
+		HandshakeSecret: handshake_secret,
+	}
+
+	handshake_payload, err := json.Marshal(handshake)
+	fmt.Println(string(handshake_payload))
+
+	handshake_url := kai_host + "/handshake"
+	req, err := http.NewRequest("POST", handshake_url, bytes.NewBuffer(handshake_payload))
+	if err != nil {
+		log.Printf("Error making request to king kai %v", err)
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if !(resp.StatusCode == 200) {
+		// TODO: raise appropriate error
+		fmt.Printf("Response code: %d", resp.StatusCode)
+		os.Exit(1)
+	}
+	if err != nil {
+		// TODO: should find a way to log this probably
+		fmt.Printf("shit there was an error %v", err)
+		return
+	}
+
+	fmt.Println("response status:", resp.Status)
+}
+
+func getHandShakeSecret() string {
+	// TODO get secret from kai file or ENV
+	return "john_wuz_here"
+}
+
 func main() {
 	// parse kai file to load settings
 	// for now we'll just fake it
 
-	// TODO: do some sort of initial sync / handshake with king kai server
-	// can send extra information at that time that doesnt need to be sent
-	// along with every json payload
+	// this is global variable
+	kai_host = "http://127.0.0.1:9091"
 
-	kai_host = "http://127.0.0.1:9091/stats"
+	// exits if not successful
+	kingKaiHandShake()
+
 	ticker := time.NewTicker(time.Second * report_cadence).C
 	token := make(chan struct{}, 1)
 	for {
