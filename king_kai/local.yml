@@ -1,0 +1,15 @@
+server:
+  restart: always
+  build: ./server
+  ports:
+    - "3000:3000"
+  links:
+    - mongodb:mongodb
+  env_file: .env
+  command: npm start
+
+mongodb:
+  restart: always
+  image: mongo:latest
+  ports:
+     - "27017:27017"
