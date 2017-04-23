@@ -7,33 +7,62 @@ const request = chai.request(app);
 
 describe('CRUD servers routes', () => {
   const testServer = {
-    cpuLoad: [1, 2, 3],
-    memoryUse: 123555,
-    diskUse: {
-      used: 445,
-      free: 125
-    },
-    topProcesses: [{
-      name: 'uwsgi',
-      cpu: 1235,
-      pid: 59
-    }],
-    dataStores: [{
-      name: 'postgres',
-      cpu: 15134,
-      memory: 1358,
-      port: 8080
-    }]
+    HostInfo: {
+      bootTime: 1234,
+      hostid: 'testID',
+      hostname: 'testHost',
+      kernelVersion: 'testKernel',
+      os: 'testOS',
+      platform: 'testPlatform',
+      platformFamily: 'testFamily',
+      platformVersion: 'testVersion',
+      procs: 85859,
+      uptime: 135858,
+      virtualizationRole: 'testRole',
+      virtualizationSystem: 'testSystem'
+    }
   };
 
+  it('Ensures authorization on POST', done => {
+    request
+      .post('/api/servers')
+      .send(testServer)
+      .then(() => {
+        done('Should not be 200 response.');
+      })
+      .catch(err => {
+        assert.equal(err.status, 403);
+        assert.equal(err.response.body.error, 'Unauthorized. No token provided.');
+        done();
+      });
+  });
+
+  it('Ensures good token on POST', done => {
+    testServer.HandshakeSecret = 'hunter2';
+
+    request
+      .post('/api/servers')
+      .send(testServer)
+      .then(() => {
+        done('Should not be 200 response.');
+      })
+      .catch(err => {
+        assert.equal(err.status, 403);
+        assert.equal(err.response.body.error, 'Unauthorized, bad token.');
+        done();
+      });
+  });
+
   it('POSTs a server', done => {
+    testServer.HandshakeSecret = 'john_wuz_here';
+
     request
       .post('/api/servers')
       .send(testServer)
       .then(res => {
-        testServer._id = res.body._id;
-        testServer.__v = res.body.__v;
-        assert.deepEqual(res.body, testServer);
+        testServer.HostInfo._id = res.body._id;
+        testServer.HostInfo.__v = res.body.__v;
+        assert.deepEqual(res.body, testServer.HostInfo);
         done();
       })
       .catch(done);
@@ -43,7 +72,7 @@ describe('CRUD servers routes', () => {
     request
       .get('/api/servers')
       .then(res => {
-        assert.deepEqual(res.body[0], testServer);
+        assert.deepEqual(res.body[0], testServer.HostInfo);
         done();
       })
       .catch(done);
