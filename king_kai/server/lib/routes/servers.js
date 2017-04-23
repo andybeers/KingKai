@@ -17,9 +17,15 @@ router
       .catch(next);
   })
   .post('/', bodyParser, (req, res, next) => {
-    new Server(req.body).save()
-      .then(newServer => res.send(newServer))
-      .catch(next);
+    // TODO: this should be a system wide settings
+    if (req.body.HandshakeSecret === "john_wuz_here") {
+      new Server(req.body.HostInfo).save()
+        .then(newServer => res.send(newServer))
+        .catch(next);
+    } else {
+      res.send(500)
+    }
+
   });
 
 module.exports = router;

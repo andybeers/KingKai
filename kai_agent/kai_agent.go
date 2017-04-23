@@ -18,6 +18,10 @@ import (
 const (
 	report_cadence            = 5
 	clear_stuck_token_cadence = 1
+
+	// api endpoints
+	handshake_base = "/api/servers"
+	snapshot_base  = "/api/snapshots"
 )
 
 var (
@@ -124,7 +128,7 @@ func sendStatsToKingKai(stats StatsCollection) {
 		log.Printf("Error converting stats to json %v", err)
 	}
 	fmt.Println(string(stats_json))
-	stats_url := kai_host + "/stats"
+	stats_url := kai_host + snapshot_base
 	req, err := http.NewRequest("POST", stats_url, bytes.NewBuffer(stats_json))
 	if err != nil {
 		log.Printf("Error making request to king kai %v", err)
@@ -161,7 +165,8 @@ func kingKaiHandShake() {
 	handshake_payload, err := json.Marshal(handshake)
 	fmt.Println(string(handshake_payload))
 
-	handshake_url := kai_host + "/handshake"
+	handshake_url := kai_host + handshake_base
+	fmt.Println(handshake_url)
 	req, err := http.NewRequest("POST", handshake_url, bytes.NewBuffer(handshake_payload))
 	if err != nil {
 		log.Printf("Error making request to king kai %v", err)
@@ -194,7 +199,7 @@ func main() {
 	// for now we'll just fake it
 
 	// this is global variable
-	kai_host = "http://127.0.0.1:9091"
+	kai_host = "http://127.0.0.1:3000"
 
 	// exits if not successful
 	kingKaiHandShake()
