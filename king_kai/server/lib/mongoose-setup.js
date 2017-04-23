@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 mongoose.Promise = Promise;
 
-mongoURI = process.env.KINGKAI_MONGODB_1_PORT
-mongoURI = mongoURI.replace("tcp", "mongodb")
+const tcpMongoURI = `${process.env.KINGKAI_MONGODB_1_PORT}/KingKai`;
+const mongoURI = tcpMongoURI.replace('tcp', 'mongodb');
 //const mongoURI = process.env.KINGKAI_MONGODB_1_PORT || 'mongodb://localhost/KingKai';
 
 mongoose.connect(mongoURI);
