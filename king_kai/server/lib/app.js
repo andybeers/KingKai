@@ -9,9 +9,11 @@ const errorHandler = require('./error-handler');
 //Logging
 app.use(morgan('dev'));
 
+//Routers
 app.use('/api/servers', servers);
 app.use('/api/snapshots', snapshots);
 
+//Error handling
 app.use(errorHandler);
 
 

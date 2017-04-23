@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Server = require('../models/server');
 const bodyParser = require('body-parser').json();
+const handshakeAuth = require('../handshake-auth')();
 
 router
   .get('/', (req, res, next) => {
@@ -16,16 +17,10 @@ router
       .then(server => res.send(server))
       .catch(next);
   })
-  .post('/', bodyParser, (req, res, next) => {
-    // TODO: this should be a system wide settings
-    if (req.body.HandshakeSecret === "john_wuz_here") {
-      new Server(req.body.HostInfo).save()
-        .then(newServer => res.send(newServer))
-        .catch(next);
-    } else {
-      res.send(500)
-    }
-
+  .post('/', bodyParser, handshakeAuth, (req, res, next) => {
+    new Server(req.body.HostInfo).save()
+      .then(newServer => res.send(newServer))
+      .catch(next);
   });
 
 module.exports = router;
