@@ -8,7 +8,7 @@ const request = chai.request(app);
 describe('CRUD snapshot routes', () => {
 
   const testSnapshot = {
-    HOST_ID: '98734789-dhfaslkdfkjl',
+    HOST_ID: 'testID',
     disk: [
       {
         free: 58989510656,
