@@ -97,4 +97,18 @@ describe('CRUD snapshot routes', () => {
       .catch(done);
   });
 
+  it('Prevents non-whitelisted POST', done => {
+    request
+      .post('/api/snapshots')
+      .send({HOST_ID: 'badID', memory: {swap: {free: 129381297 }}})
+      .then(() => {
+        done('Should not be status 200');
+      })
+      .catch(err => {
+        assert.equal(err.status, 403);
+        assert.equal(err.response.body.error, 'Unauthorized, bad token.');
+        done();
+      });
+  });
+
 });

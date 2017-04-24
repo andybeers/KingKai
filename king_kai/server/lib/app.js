@@ -4,7 +4,7 @@ const morgan = require('morgan');
 
 const servers = require('./routes/servers');
 const snapshots = require('./routes/snapshots');
-const errorHandler = require('./error-handler');
+const errorHandler = require('./routes/error-handler');
 
 //Logging
 app.use(morgan('dev'));
