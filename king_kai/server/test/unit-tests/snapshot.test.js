@@ -6,6 +6,7 @@ const Snapshot = require('../../lib/models/snapshot');
 describe('Snapshot model', () => {
 
   const testSnapshot = new Snapshot({
+    HOST_ID: '87c9fbe9-c8c8-4130-a161-04de4ebf52dd',
     disk: [
       {
         free: 58989510656,

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
+  HOST_ID: { type: String },
   disk: [{
     //Prevent mongoose from generating IDs for subdocuments
     _id: false,

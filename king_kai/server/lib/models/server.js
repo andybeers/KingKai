@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-  HandshakeSecret: { type: String },
   bootTime: { type: Number },
   hostid: { type: String},
   hostname: { type: String },
