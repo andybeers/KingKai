@@ -1,4 +1,4 @@
-const Server = require('./models/server');
+const Server = require('../models/server');
 
 module.exports = function getWhitelist() {
   return function whitelist(req, res, next) {

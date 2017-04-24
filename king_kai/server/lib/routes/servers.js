@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Server = require('../models/server');
 const bodyParser = require('body-parser').json();
-const handshakeAuth = require('../handshake-auth')();
+const handshakeAuth = require('../middleware/handshake-auth')();
 
 router
   .get('/', (req, res, next) => {

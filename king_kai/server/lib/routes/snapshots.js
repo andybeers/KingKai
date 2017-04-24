@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Snapshot = require('../models/snapshot');
 const bodyParser = require('body-parser').json();
-const whitelist = require('../whitelist')();
+const whitelist = require('../middleware/whitelist')();
 
 router
   .get('/', (req, res, next) => {
