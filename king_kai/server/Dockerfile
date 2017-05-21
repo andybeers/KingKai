@@ -5,10 +5,7 @@ WORKDIR /usr/src/app
 
 ARG NODE_ENV
 ENV NODE_ENV $NODE_ENV
-COPY dev-package.json /usr/src/app/
-RUN mv dev-package.json package.json
-RUN npm install && npm cache clean
 COPY . /usr/src/app
-RUN mv dev-package.json package.json
+RUN npm install && npm cache clean
 
 CMD [ "npm", "start" ]
