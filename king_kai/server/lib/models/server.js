@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+//TODO change 'server' to 'host'
 const schema = new Schema({
   bootTime: { type: Number },
   hostid: { type: String},
