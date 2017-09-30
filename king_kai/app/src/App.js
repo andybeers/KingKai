@@ -1,19 +1,20 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import Results from './Results';
+import React, { Component } from 'react'
+import logo from './logo.svg'
+import './App.css'
+import Results from './Results'
 
 class App extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       snapshots: [],
     }
   }
 
   doFetch() {
-    fetch(`http://localhost:3000/api/snapshots`)
+    console.log('Fetching data...')
+    fetch('http://localhost:3000/api/snapshots')
       .then(res => res.json())
       .then(snaps => {
         this.setState({
@@ -21,19 +22,19 @@ class App extends Component {
         })
       })
       .catch(err => {
-        console.log('you done fucked up', err.message);
+        console.log('you done fucked up', err.message)
       })
   }
 
   componentDidMount() {
-    this.doFetch();
+    this.doFetch()
     this._timerId = setInterval(() => {
-      this.doFetch();
-    }, 2000);
+      this.doFetch()
+    }, 2000)
   }
 
   componentWillUnmount() {
-    clearInterval(this._timerId);
+    clearInterval(this._timerId)
   }
 
   render() {
@@ -48,8 +49,8 @@ class App extends Component {
         </p>
         <Results snapshots={this.state.snapshots}/>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
