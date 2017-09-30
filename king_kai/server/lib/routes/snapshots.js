@@ -6,7 +6,8 @@ const whitelist = require('../middleware/whitelist')();
 
 router
   .get('/', (req, res, next) => {
-    Snapshot.find()
+    let query = {};
+    Snapshot.find(query)
       .lean()
       .then(snapshots => res.send(snapshots))
       .catch(next);

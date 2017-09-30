@@ -19,9 +19,9 @@
     "morgan": "^1.8.1"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
+    "chai": "^4.1.2",
     "chai-http": "^3.0.0",
-    "eslint": "^3.19.0",
-    "mocha": "^3.2.0"
+    "eslint": "^4.7.2",
+    "mocha": "^3.5.3"
   }
 }
