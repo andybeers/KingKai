@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import logo from './logo.svg'
 import './App.css'
 import Results from './Results'
+import AlertTest from './AlertTest'
+import { Jumbotron, Button } from 'reactstrap'
 
 class App extends Component {
 
@@ -40,13 +41,14 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>KING KAI</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <Jumbotron>
+          <h1 className='display-3'>King Kai</h1>
+          <p className='lead'>You got servers? Yeah, you got servers.</p>
+          <Button color='primary'>
+            Do something
+          </Button>  
+        </Jumbotron>
+        <AlertTest />
         <Results snapshots={this.state.snapshots}/>
       </div>
     )
