@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 const Results = props => (
   <div>
-    <h1>{'Shit\'s here, yo.'}</h1>
+    <h3>Here's yer dang servers.</h3>
     <ul>
       {props.snapshots.map(
         snap => <li key={snap._id}>{snap.HOST_ID}: Virtual memory active: {snap.memory.virtual.active}</li>
