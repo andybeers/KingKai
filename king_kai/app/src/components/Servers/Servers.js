@@ -7,7 +7,7 @@ const Servers = props => (
     <h3>Heres yer dang servers.</h3>
     <ul>
       {props.servers.map(
-        server => <li key={server._id}>{server.hostname}</li>
+        server => <li key={server._id}>Hostname: {server.hostname} | Host ID: {server.hostid}</li>
       )}
     </ul>
   </div>
