@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import './App.css'
-import Servers from '../Servers/Servers'
-import Snapshots from '../Snapshots/Snapshots'
-import AlertTest from '../AlertTest/AlertTest'
-import { Button } from 'reactstrap'
+import AppHeader from '../AppHeader/AppHeader'
+import Dashboard from '../Dashboard/Dashboard'
 
 class App extends Component {
 
@@ -57,10 +55,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1 className='display-3 logo'>King Kai</h1>
-        <AlertTest />
-        <Servers servers={this.state.servers} />
-        <Snapshots snapshots={this.state.snapshots} hostName={this.state.snapshots.length ? this.state.snapshots[0].HOST_ID : 'Nope'} />
+        <AppHeader />
+        <Dashboard
+          servers={this.state.servers}
+          snapshots={this.state.snapshots}/>
       </div>
     )
   }

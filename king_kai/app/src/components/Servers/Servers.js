@@ -1,15 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Card, CardTitle, CardText } from 'reactstrap'
 import './Servers.css'
 
 const Servers = props => (
   <div className='servers-container'>
-    <h3>Heres yer dang servers.</h3>
-    <ul>
-      {props.servers.map(
-        server => <li key={server._id}>Hostname: {server.hostname} | Host ID: {server.hostid}</li>
-      )}
-    </ul>
+    {props.servers.map(
+      server => (
+        <Card key={server.hostid} style={{ backgroundColor: '#333', borderColor: '#333' }}>
+          <CardTitle>Hostname: {server.hostname}</CardTitle>
+          <CardText>Host ID: {server.hostid}</CardText>
+        </Card>
+      )
+    )}
   </div>
 )
 
