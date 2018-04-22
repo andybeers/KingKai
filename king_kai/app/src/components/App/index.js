@@ -1,21 +1,20 @@
 import React, { Component } from 'react'
-import './App.css'
-import AppHeader from '../AppHeader/AppHeader'
-import Dashboard from '../Dashboard/Dashboard'
+import './app.css'
+import AppHeader from '../AppHeader'
+import Dashboard from '../Dashboard'
 
 class App extends Component {
-
   constructor(props) {
     super(props)
     this.state = {
       servers: [],
-      snapshots: [],
+      snapshots: []
     }
   }
 
-  doFetch() {
+  fetchServers() {
     console.log('Fetching data...')
-    fetch('http://localhost:3000/api/servers')
+    fetch('http://localhost:9000/api/servers')
       .then(res => res.json())
       .then(res => {
         this.setState({
@@ -28,7 +27,7 @@ class App extends Component {
   }
 
   fetchSnapshots() {
-    fetch('http://localhost:3000/api/snapshots')
+    fetch('http://localhost:9000/api/snapshots')
       .then(res => res.json())
       .then(res => {
         this.setState({
@@ -41,11 +40,11 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.doFetch()
+    this.fetchServers()
     this.fetchSnapshots()
-    this._timerId = setInterval(() => {
-      this.doFetch()
-    }, 6000)
+    // this._timerId = setInterval(() => {
+    //   this.fetchServers()
+    // }, 6000)
   }
 
   componentWillUnmount() {
@@ -56,9 +55,7 @@ class App extends Component {
     return (
       <div className="App">
         <AppHeader />
-        <Dashboard
-          servers={this.state.servers}
-          snapshots={this.state.snapshots}/>
+        <Dashboard servers={this.state.servers} snapshots={this.state.snapshots} />
       </div>
     )
   }

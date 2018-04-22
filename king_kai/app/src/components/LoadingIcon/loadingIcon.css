@@ -1,7 +1,3 @@
-header {
-  padding: 0.5rem;
-}
-
 .logo {
   font-family: 'Bangers', cursive;
   color: #96eaf7;
@@ -9,8 +5,7 @@ header {
 }
 
 .logo:hover {
-  color: yellow;
+  color: red;
   letter-spacing: 4px;
   motion-rotation: 15deg;
-  border-bottom: 3px dotted yellow;
 }

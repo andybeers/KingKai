@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import './Snapshots.css'
+import './snapshots.css'
 
 const Snapshots = props => (
   <div>
