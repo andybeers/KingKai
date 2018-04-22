@@ -1,11 +1,10 @@
 .logo {
   font-family: 'Bangers', cursive;
   color: #96eaf7;
-  transition: all 1.5s;
+  transition: all 1s;
 }
 
 .logo:hover {
-  color: red;
-  letter-spacing: 4px;
-  motion-rotation: 15deg;
+  color: gold;
+  letter-spacing: 10px;
 }

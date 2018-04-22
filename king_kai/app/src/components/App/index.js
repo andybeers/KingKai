@@ -2,27 +2,34 @@ import React, { Component } from 'react'
 import './app.css'
 import AppHeader from '../AppHeader'
 import Dashboard from '../Dashboard'
+// import LoadingIcon from '../LoadingIcon'
 
 class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      servers: [],
-      snapshots: []
-    }
+  state = {
+    servers: [],
+    snapshots: [],
+    loading: false,
+    serverError: '',
+    snapsError: ''
   }
 
   fetchServers() {
     console.log('Fetching data...')
+    this.setState({ loading: true })
     fetch('http://localhost:9000/api/servers')
       .then(res => res.json())
       .then(res => {
         this.setState({
-          servers: res
+          servers: res,
+          serverError: '',
+          loading: false
         })
       })
       .catch(err => {
-        console.log('you done fucked up', err.message)
+        this.setState({
+          serverError: 'Servers done borked',
+          loading: false
+        })
       })
   }
 
@@ -31,11 +38,12 @@ class App extends Component {
       .then(res => res.json())
       .then(res => {
         this.setState({
-          snapshots: res
+          snapshots: res,
+          snapsError: ''
         })
       })
       .catch(err => {
-        console.log('you done fucked up', err.message)
+        this.setState({ snapsError: 'Snaps done borked' })
       })
   }
 
@@ -52,9 +60,15 @@ class App extends Component {
   }
 
   render() {
+    const { loading, serverError, snapsError } = this.state
+
+    // if (loading) return <LoadingIcon />
+
     return (
       <div className="App">
         <AppHeader />
+        {(serverError || snapsError) &&
+          `Server error: ${serverError} ::: Snaps error: ${snapsError}`}
         <Dashboard servers={this.state.servers} snapshots={this.state.snapshots} />
       </div>
     )

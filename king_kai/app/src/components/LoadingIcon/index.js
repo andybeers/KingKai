@@ -2,5 +2,9 @@ import React from 'react'
 import './loadingIcon.css'
 
 export default function LoadingIcon() {
-  return <h1 className="logo">King Kai</h1>
+  return (
+    <div>
+      <h1 className="display-2 logo">King Kai</h1>
+    </div>
+  )
 }
