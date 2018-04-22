@@ -5,12 +5,10 @@ header {
 .logo {
   font-family: 'Bangers', cursive;
   color: #96eaf7;
-  transition: all 1.5s;
+  transition: all 1s;
 }
 
 .logo:hover {
-  color: yellow;
-  letter-spacing: 4px;
-  motion-rotation: 15deg;
-  border-bottom: 3px dotted yellow;
+  color: gold;
+  letter-spacing: 10px;
 }
