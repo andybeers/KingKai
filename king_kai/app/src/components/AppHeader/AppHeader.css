@@ -1,0 +1,14 @@
+header {
+  padding: 0.5rem;
+}
+
+.logo {
+  font-family: 'Bangers', cursive;
+  color: #96eaf7;
+  transition: all 1s;
+}
+
+.logo:hover {
+  color: gold;
+  letter-spacing: 10px;
+}
