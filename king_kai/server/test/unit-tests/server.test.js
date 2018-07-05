@@ -1,7 +1,7 @@
-const assert = require('chai').assert;
-const mongoose = require('mongoose');
-mongoose.Promise = Promise;
-const Server = require('../../lib/models/server');
+const assert = require('chai').assert
+const mongoose = require('mongoose')
+mongoose.Promise = Promise
+const Server = require('../../lib/models/server')
 
 describe('Server model', () => {
   it('Validates server model', done => {
@@ -18,13 +18,13 @@ describe('Server model', () => {
         procs: 85859,
         uptime: 135858,
         virtualizationRole: 'testRole',
-        virtualizationSystem: 'testSystem'
-      }
-    });
+        virtualizationSystem: 'testSystem',
+      },
+    })
 
     testServer.validate(err => {
-      assert.isNotOk(err);
-      done(err);
-    });
-  });
-});
+      assert.isNotOk(err)
+      done(err)
+    })
+  })
+})

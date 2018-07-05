@@ -7,7 +7,7 @@
       "experimentalObjectRestSpread": true,
       "impliedStrict": true
     }
-	},
+  },
   "env": {
     "node": true,
     "mocha": true,
@@ -21,21 +21,10 @@
   "extends": "eslint:recommended",
   "rules": {
     "no-console": "off",
-    "indent": [
-      "error",
-      2
-    ],
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
-    "quotes": [
-      "error",
-      "single"
-    ],
-    "semi": [
-      "error",
-      "always"
-    ]
+    "no-unused-vars": ["warn"],
+    "indent": ["error", 2],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "single"],
+    "semi": ["warn", "never"]
   }
 }
