@@ -1,12 +1,11 @@
-const chai = require('chai');
-const assert = chai.assert;
-const chaiHttp = require('chai-http');
-chai.use(chaiHttp);
-const app = require('../../lib/app');
-const request = chai.request(app);
+const chai = require('chai')
+const assert = chai.assert
+const chaiHttp = require('chai-http')
+chai.use(chaiHttp)
+const app = require('../../lib/app')
+const request = chai.request(app)
 
 describe('CRUD snapshot routes', () => {
-
   const testSnapshot = {
     HOST_ID: 'testID',
     disk: [
@@ -20,8 +19,8 @@ describe('CRUD snapshot routes', () => {
         path: '/',
         total: 101236436992,
         used: 37080752128,
-        usedPercent: 36.62787157447099
-      }
+        usedPercent: 36.62787157447099,
+      },
     ],
     cpus: [
       {
@@ -36,7 +35,7 @@ describe('CRUD snapshot routes', () => {
         steal: 0,
         stolen: 0,
         system: 23077.85,
-        user: 12862.3
+        user: 12862.3,
       },
       {
         cpu: 'cpu1',
@@ -50,8 +49,8 @@ describe('CRUD snapshot routes', () => {
         steal: 0,
         stolen: 0,
         system: 23142.52,
-        user: 12597.23
-      }
+        user: 12597.23,
+      },
     ],
     memory: {
       swap: {
@@ -60,7 +59,7 @@ describe('CRUD snapshot routes', () => {
         sout: 13058048,
         total: 17043550208,
         used: 12353536,
-        usedPercent: 0.07248217565728428
+        usedPercent: 0.07248217565728428,
       },
       virtual: {
         active: 5091659776,
@@ -79,36 +78,35 @@ describe('CRUD snapshot routes', () => {
         usedPercent: 30.04896544073051,
         wired: 0,
         writeback: 0,
-        writebacktmp: 0
-      }
-    }
-  };
+        writebacktmp: 0,
+      },
+    },
+  }
 
   it('POSTs a snapshot', done => {
     request
       .post('/api/snapshots')
       .send(testSnapshot)
       .then(res => {
-        testSnapshot._id = res.body._id;
-        testSnapshot.__v = res.body.__v;
-        assert.deepEqual(res.body, testSnapshot);
-        done();
+        testSnapshot._id = res.body._id
+        testSnapshot.__v = res.body.__v
+        assert.deepEqual(res.body, testSnapshot)
+        done()
       })
-      .catch(done);
-  });
+      .catch(done)
+  })
 
   it('Prevents non-whitelisted POST', done => {
     request
       .post('/api/snapshots')
-      .send({HOST_ID: 'badID', memory: {swap: {free: 129381297 }}})
+      .send({ HOST_ID: 'badID', memory: { swap: { free: 129381297 } } })
       .then(() => {
-        done('Should not be status 200');
+        done('Should not be status 200')
       })
       .catch(err => {
-        assert.equal(err.status, 403);
-        assert.equal(err.response.body.error, 'Unauthorized, bad token.');
-        done();
-      });
-  });
-
-});
+        assert.equal(err.status, 403)
+        assert.equal(err.response.body.error, 'Unauthorized, bad token.')
+        done()
+      })
+  })
+})

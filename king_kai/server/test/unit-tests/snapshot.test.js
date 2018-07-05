@@ -1,10 +1,9 @@
-const assert = require('chai').assert;
-const mongoose = require('mongoose');
-mongoose.Promise = Promise;
-const Snapshot = require('../../lib/models/snapshot');
+const assert = require('chai').assert
+const mongoose = require('mongoose')
+mongoose.Promise = Promise
+const Snapshot = require('../../lib/models/snapshot')
 
 describe('Snapshot model', () => {
-
   const testSnapshot = new Snapshot({
     HOST_ID: '87c9fbe9-c8c8-4130-a161-04de4ebf52dd',
     disk: [
@@ -18,8 +17,8 @@ describe('Snapshot model', () => {
         path: '/',
         total: 101236436992,
         used: 37080752128,
-        usedPercent: 36.62787157447099
-      }
+        usedPercent: 36.62787157447099,
+      },
     ],
     cpus: [
       {
@@ -34,7 +33,7 @@ describe('Snapshot model', () => {
         steal: 0,
         stolen: 0,
         system: 23077.85,
-        user: 12862.3
+        user: 12862.3,
       },
       {
         cpu: 'cpu1',
@@ -48,8 +47,8 @@ describe('Snapshot model', () => {
         steal: 0,
         stolen: 0,
         system: 23142.52,
-        user: 12597.23
-      }
+        user: 12597.23,
+      },
     ],
     memory: {
       swap: {
@@ -58,7 +57,7 @@ describe('Snapshot model', () => {
         sout: 13058048,
         total: 17043550208,
         used: 12353536,
-        usedPercent: 0.07248217565728428
+        usedPercent: 0.07248217565728428,
       },
       virtual: {
         active: 5091659776,
@@ -77,16 +76,15 @@ describe('Snapshot model', () => {
         usedPercent: 30.04896544073051,
         wired: 0,
         writeback: 0,
-        writebacktmp: 0
-      }
-    }
-  });
+        writebacktmp: 0,
+      },
+    },
+  })
 
   it('Validates snapshot model', done => {
     testSnapshot.validate(err => {
-      assert.isNotOk(err);
-      done(err);
-    });
-  });
-
-});
+      assert.isNotOk(err)
+      done(err)
+    })
+  })
+})
