@@ -4,11 +4,12 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.1",
-    "react": "^16.1.0",
-    "react-dom": "^16.1.0",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
     "reactstrap": "^5.0.0-alpha.3"
   },
   "devDependencies": {
+    "prettier": "1.13.7",
     "react-scripts": "1.1.4"
   },
   "scripts": {

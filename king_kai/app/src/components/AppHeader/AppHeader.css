@@ -4,7 +4,8 @@ header {
 
 .logo {
   font-family: 'Bangers', cursive;
-  color: #96eaf7;
+  /* color: #96eaf7; */
+  color: darkblue;
   transition: all 1s;
 }
 
