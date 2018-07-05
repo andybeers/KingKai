@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-mongoose.Promise = Promise
 
 // const tcpMongoURI = `${process.env.KINGKAI_MONGODB_1_PORT}/KingKai`;
 // const mongoURI = tcpMongoURI.replace('tcp', 'mongodb');

@@ -7,7 +7,6 @@ module.exports = {
   getWhitelist: () => whitelist,
 
   buildWhitelist: () => {
-    console.log('building whitelist...')
     Server.find()
       .lean()
       .then(servers => {
