@@ -25,10 +25,6 @@ class App extends Component {
   //     })
   // }
 
-  componentWillUnmount() {
-    clearInterval(this._timerId)
-  }
-
   render() {
     const { loading } = this.state
 

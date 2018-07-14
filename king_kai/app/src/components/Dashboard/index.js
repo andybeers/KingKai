@@ -17,6 +17,10 @@ class Dashboard extends Component {
     // }, 6000)
   }
 
+  componentWillUnmount() {
+    clearInterval(this._timerId)
+  }
+
   fetchServers() {
     console.log('Fetching data...')
     this.setState({ loading: true })
@@ -29,7 +33,7 @@ class Dashboard extends Component {
           loading: false,
         })
       })
-      .catch(err => {
+      .catch(() => {
         this.setState({
           serverError: 'Servers done borked',
           loading: false,
